@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.svg" width="140" alt="CryptAge logo" />
+  <img src="docs/logo.svg" width="200" alt="CryptAge logo" />
 </p>
 
 <h1 align="center">CryptAge</h1>
