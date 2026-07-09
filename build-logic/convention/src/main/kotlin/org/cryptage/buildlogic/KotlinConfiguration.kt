@@ -42,7 +42,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension) {
 
     extensions.configure<KotlinAndroidProjectExtension> {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 }
@@ -55,7 +55,7 @@ internal fun Project.configureKotlinJvm() {
 
     extensions.configure<KotlinJvmProjectExtension> {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 }
