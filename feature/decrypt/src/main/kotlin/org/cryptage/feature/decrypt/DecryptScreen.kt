@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.cryptage.core.model.JobOperation
 import org.cryptage.core.ui.JobProgressList
 import org.cryptage.core.ui.PassphraseDialog
+import org.cryptage.core.ui.primaryStorageInitialUri
 
 @Composable
 fun DecryptScreen(viewModel: DecryptViewModel, modifier: Modifier = Modifier) {
@@ -112,7 +113,7 @@ fun DecryptScreen(viewModel: DecryptViewModel, modifier: Modifier = Modifier) {
         }
 
         SectionTitle(stringResource(R.string.decrypt_section_destination))
-        OutlinedButton(onClick = { destinationLauncher.launch(null) }) {
+        OutlinedButton(onClick = { destinationLauncher.launch(primaryStorageInitialUri) }) {
             Icon(Icons.Filled.Folder, contentDescription = null)
             Text(
                 text = state.destinationName

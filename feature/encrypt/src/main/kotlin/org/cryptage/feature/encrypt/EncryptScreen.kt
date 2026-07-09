@@ -50,6 +50,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.cryptage.core.model.JobOperation
 import org.cryptage.core.ui.JobProgressList
 import org.cryptage.core.ui.PassphraseField
+import org.cryptage.core.ui.primaryStorageInitialUri
 
 @Composable
 fun EncryptScreen(viewModel: EncryptViewModel, modifier: Modifier = Modifier) {
@@ -83,7 +84,7 @@ fun EncryptScreen(viewModel: EncryptViewModel, modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(start = 8.dp),
                 )
             }
-            OutlinedButton(onClick = { folderLauncher.launch(null) }) {
+            OutlinedButton(onClick = { folderLauncher.launch(primaryStorageInitialUri) }) {
                 Icon(Icons.Filled.Folder, contentDescription = null)
                 Text(
                     text = stringResource(R.string.encrypt_add_folder),
@@ -155,7 +156,7 @@ fun EncryptScreen(viewModel: EncryptViewModel, modifier: Modifier = Modifier) {
         }
 
         SectionTitle(stringResource(R.string.encrypt_section_destination))
-        OutlinedButton(onClick = { destinationLauncher.launch(null) }) {
+        OutlinedButton(onClick = { destinationLauncher.launch(primaryStorageInitialUri) }) {
             Icon(Icons.Filled.Folder, contentDescription = null)
             Text(
                 text = state.destinationName
