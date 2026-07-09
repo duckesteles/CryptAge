@@ -27,4 +27,5 @@ android {
 dependencies {
     implementation(project(":core:ui"))
     api(libs.biometric)
+    implementation(libs.fragment)
 }

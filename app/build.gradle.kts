@@ -76,5 +76,6 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(libs.activity.compose)
     implementation(libs.biometric)
+    implementation(libs.fragment)
     implementation(libs.kotlinx.coroutines.android)
 }
