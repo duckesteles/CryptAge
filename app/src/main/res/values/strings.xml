@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CryptAge</string>
+    <string name="app_tab_encrypt">Encrypt</string>
+    <string name="app_tab_decrypt">Decrypt</string>
+    <string name="app_title_settings">Settings</string>
+    <string name="app_title_keys">Keys</string>
+    <string name="app_title_licenses">Open Source Licenses</string>
+    <string name="app_action_settings">Open settings</string>
+    <string name="app_action_back">Back</string>
+</resources>

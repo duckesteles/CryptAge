@@ -1,0 +1,19 @@
+<resources>
+    <string name="core_ui_cancel">Cancel</string>
+    <string name="core_ui_passphrase_label">Passphrase</string>
+    <string name="core_ui_show_passphrase">Show passphrase</string>
+    <string name="core_ui_hide_passphrase">Hide passphrase</string>
+    <string name="core_ui_state_waiting">Waiting</string>
+    <string name="core_ui_state_done">Done</string>
+    <string name="core_ui_state_failed">Failed</string>
+    <string name="core_ui_state_saved_as">Saved as %1$s</string>
+    <string name="core_ui_error_wrong_key">None of your keys can decrypt this file.</string>
+    <string name="core_ui_error_wrong_passphrase">The passphrase is incorrect.</string>
+    <string name="core_ui_error_passphrase_required">This file requires a passphrase.</string>
+    <string name="core_ui_error_not_age_file">This is not an age encrypted file.</string>
+    <string name="core_ui_error_corrupt_file">The file is damaged or incomplete.</string>
+    <string name="core_ui_error_unreadable_input">The input could not be read.</string>
+    <string name="core_ui_error_write_failed">The output could not be written to the chosen destination.</string>
+    <string name="core_ui_error_out_of_space">There is not enough storage space at the destination.</string>
+    <string name="core_ui_error_unknown">An unexpected error occurred.</string>
+</resources>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="decrypt_section_input">Encrypted files</string>
+    <string name="decrypt_add_files">Add files</string>
+    <string name="decrypt_remove">Remove</string>
+    <string name="decrypt_section_destination">Destination</string>
+    <string name="decrypt_choose_destination">Choose destination folder</string>
+    <string name="decrypt_start">Decrypt</string>
+    <string name="decrypt_section_progress">Progress</string>
+    <string name="decrypt_passphrase_title">Enter the passphrase</string>
+</resources>

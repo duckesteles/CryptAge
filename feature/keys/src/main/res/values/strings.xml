@@ -1,0 +1,24 @@
+<resources>
+    <string name="keys_generate">Generate</string>
+    <string name="keys_import">Import</string>
+    <string name="keys_empty">No keys yet. Generate a new keypair or import an existing key.</string>
+    <string name="keys_badge_secret">Secret key</string>
+    <string name="keys_badge_public">Public key</string>
+    <string name="keys_copy_public">Copy public key</string>
+    <string name="keys_copy_secret">Copy secret key</string>
+    <string name="keys_reveal_secret">Show secret key</string>
+    <string name="keys_reveal_warning">Keep this secret key safe. Anyone who has it can decrypt your files.</string>
+    <string name="keys_delete">Delete</string>
+    <string name="keys_delete_title">Delete key?</string>
+    <string name="keys_delete_message">%1$s will be removed. Files encrypted only to this key cannot be decrypted without its secret key.</string>
+    <string name="keys_generate_title">Generate a new keypair</string>
+    <string name="keys_import_title">Import a key</string>
+    <string name="keys_name_label">Name</string>
+    <string name="keys_identity_label">Secret key (optional)</string>
+    <string name="keys_recipient_label">Public key (optional)</string>
+    <string name="keys_error_no_material">Enter a secret key, a public key, or both.</string>
+    <string name="keys_error_invalid_identity">The secret key is not a valid age identity.</string>
+    <string name="keys_error_invalid_recipient">The public key is not a valid age recipient.</string>
+    <string name="keys_cancel">Cancel</string>
+    <string name="keys_close">Close</string>
+</resources>

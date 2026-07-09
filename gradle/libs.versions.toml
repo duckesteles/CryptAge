@@ -1,0 +1,42 @@
+[versions]
+agp = "9.2.0"
+kotlin = "2.4.0"
+coroutines = "1.10.2"
+composeBom = "2026.06.00"
+activityCompose = "1.12.3"
+lifecycle = "2.10.0"
+iconsExtended = "1.7.8"
+kage = "0.5.0"
+zstdJni = "1.5.7-9"
+commonsCompress = "1.28.0"
+biometric = "1.1.0"
+tink = "1.19.0"
+datastore = "1.2.0"
+documentfile = "1.1.0"
+
+[libraries]
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-compiler-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "iconsExtended" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+kage = { module = "com.github.android-password-store:kage", version.ref = "kage" }
+commons-compress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
+biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tink" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+documentfile = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

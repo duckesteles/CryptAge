@@ -1,0 +1,7 @@
+-keep class com.github.luben.zstd.** { *; }
+-dontwarn org.tukaani.xz.**
+-dontwarn org.brotli.dec.**
+-dontwarn com.github.luben.zstd.**
+-dontwarn org.objectweb.asm.**
+-dontwarn org.osgi.**
+-dontwarn javax.naming.**

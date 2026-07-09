@@ -1,0 +1,15 @@
+<resources>
+    <string name="encrypt_section_input">Files and folders</string>
+    <string name="encrypt_add_files">Add files</string>
+    <string name="encrypt_add_folder">Add folder</string>
+    <string name="encrypt_remove">Remove</string>
+    <string name="encrypt_section_mode">Encryption mode</string>
+    <string name="encrypt_mode_keys">With keys</string>
+    <string name="encrypt_mode_passphrase">With passphrase</string>
+    <string name="encrypt_no_recipients">No public keys yet. Add or generate one under Settings, Keys.</string>
+    <string name="encrypt_passphrase_label">Passphrase</string>
+    <string name="encrypt_section_destination">Destination</string>
+    <string name="encrypt_choose_destination">Choose destination folder</string>
+    <string name="encrypt_start">Encrypt</string>
+    <string name="encrypt_section_progress">Progress</string>
+</resources>

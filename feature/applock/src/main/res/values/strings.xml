@@ -1,0 +1,14 @@
+<resources>
+    <string name="applock_title">CryptAge is locked</string>
+    <string name="applock_pin_label">PIN</string>
+    <string name="applock_unlock">Unlock</string>
+    <string name="applock_use_biometric">Use fingerprint</string>
+    <string name="applock_wrong_pin">Incorrect PIN.</string>
+    <string name="applock_biometric_title">Unlock CryptAge</string>
+    <string name="applock_cancel">Cancel</string>
+    <string name="applock_set_pin_title">Set a PIN</string>
+    <string name="applock_new_pin">New PIN</string>
+    <string name="applock_confirm_pin">Confirm PIN</string>
+    <string name="applock_pin_mismatch">The PINs do not match.</string>
+    <string name="applock_save">Save</string>
+</resources>

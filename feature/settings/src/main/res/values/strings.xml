@@ -1,0 +1,18 @@
+<resources>
+    <string name="settings_section_app_lock">App lock</string>
+    <string name="settings_biometric">Biometric unlock</string>
+    <string name="settings_biometric_subtitle">Unlock CryptAge with your fingerprint.</string>
+    <string name="settings_biometric_unavailable">No biometric hardware is available on this device.</string>
+    <string name="settings_pin">PIN unlock</string>
+    <string name="settings_pin_subtitle">Require a PIN to open CryptAge.</string>
+    <string name="settings_section_compression">Folder compression</string>
+    <string name="settings_zstd">Zstandard compression</string>
+    <string name="settings_zstd_subtitle">Compress folders before encrypting them.</string>
+    <string name="settings_zstd_level">Compression level: %1$d</string>
+    <string name="settings_section_more">More</string>
+    <string name="settings_keys">Keys</string>
+    <string name="settings_keys_subtitle">View, generate, and import age keys.</string>
+    <string name="settings_licenses">Open source licenses</string>
+    <string name="settings_licenses_subtitle">Third-party libraries used by CryptAge.</string>
+    <string name="settings_license_line">License: %1$s</string>
+</resources>

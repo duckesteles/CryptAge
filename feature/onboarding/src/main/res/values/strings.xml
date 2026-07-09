@@ -1,0 +1,17 @@
+<resources>
+    <string name="onboarding_welcome_title">Welcome to CryptAge</string>
+    <string name="onboarding_welcome_body">CryptAge encrypts your files and folders with the age encryption format. Start by creating your personal keypair.</string>
+    <string name="onboarding_generate_key">Generate my keypair</string>
+    <string name="onboarding_default_key_name">My key</string>
+    <string name="onboarding_backup_title">Back up your key</string>
+    <string name="onboarding_backup_warning">Store your secret key in a safe place now. If you lose it, files encrypted to this key are lost permanently.</string>
+    <string name="onboarding_public_key">Public key</string>
+    <string name="onboarding_secret_key">Secret key</string>
+    <string name="onboarding_copy">Copy</string>
+    <string name="onboarding_backup_done">I saved my key</string>
+    <string name="onboarding_lock_title">Protect the app</string>
+    <string name="onboarding_lock_body">Optionally require a fingerprint or a PIN to open CryptAge. You can change this later in Settings.</string>
+    <string name="onboarding_lock_biometric">Unlock with fingerprint</string>
+    <string name="onboarding_lock_pin">Unlock with PIN</string>
+    <string name="onboarding_finish">Start using CryptAge</string>
+</resources>
