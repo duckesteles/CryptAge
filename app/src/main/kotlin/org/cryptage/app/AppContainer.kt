@@ -29,13 +29,11 @@ import org.cryptage.core.jobs.DecryptExecutor
 import org.cryptage.core.jobs.DecryptPreflight
 import org.cryptage.core.jobs.EncryptExecutor
 import org.cryptage.core.securestore.AppLockStore
-import org.cryptage.core.securestore.EncryptedPreferenceStore
 import org.cryptage.core.securestore.KeyEntryRepository
 import org.cryptage.core.securestore.SecureKeyEntryRepository
-import org.cryptage.core.securestore.SecureStoreAead
-import org.cryptage.core.securestore.secureStoreDataStoreOf
+import org.cryptage.core.securestore.encryptedPreferenceStoreOf
 import org.cryptage.core.settings.SettingsRepository
-import org.cryptage.core.settings.settingsDataStoreOf
+import org.cryptage.core.settings.settingsRepositoryOf
 
 class AppContainer(context: Context) {
 
@@ -46,7 +44,7 @@ class AppContainer(context: Context) {
     private val applicationScope = CoroutineScope(SupervisorJob() + dispatchers.default)
 
     private val encryptedStore by lazy {
-        EncryptedPreferenceStore(secureStoreDataStoreOf(appContext), SecureStoreAead.create(appContext))
+        encryptedPreferenceStoreOf(appContext)
     }
 
     val keyEntryRepository: KeyEntryRepository by lazy {
@@ -58,7 +56,7 @@ class AppContainer(context: Context) {
     }
 
     val settingsRepository: SettingsRepository by lazy {
-        SettingsRepository(settingsDataStoreOf(appContext))
+        settingsRepositoryOf(appContext)
     }
 
     val safStorage: SafStorage by lazy {

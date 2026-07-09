@@ -26,5 +26,8 @@ private val Context.settingsDataStore: DataStore<Preferences> by preferencesData
     name = "settings",
 )
 
-fun settingsDataStoreOf(context: Context): DataStore<Preferences> =
+internal fun settingsDataStoreOf(context: Context): DataStore<Preferences> =
     context.settingsDataStore
+
+fun settingsRepositoryOf(context: Context): SettingsRepository =
+    SettingsRepository(settingsDataStoreOf(context))

@@ -26,5 +26,8 @@ private val Context.secureStoreDataStore: DataStore<Preferences> by preferencesD
     name = "securestore",
 )
 
-fun secureStoreDataStoreOf(context: Context): DataStore<Preferences> =
+internal fun secureStoreDataStoreOf(context: Context): DataStore<Preferences> =
     context.secureStoreDataStore
+
+fun encryptedPreferenceStoreOf(context: Context): EncryptedPreferenceStore =
+    EncryptedPreferenceStore(secureStoreDataStoreOf(context), SecureStoreAead.create(context))
