@@ -1,6 +1,6 @@
 # CryptAge
 
-CryptAge is a native Android app for encrypting and decrypting files and folders with the [age](https://age-encryption.org) file encryption format, built on [KAGE](https://github.com/android-password-store/kage), with Zstandard folder archiving and a Material You (Material 3) interface.
+CryptAge is a native Android app for encrypting and decrypting files and folders with the [age](https://age-encryption.org) file encryption format, built on [kage](https://github.com/android-password-store/kage), with Zstandard folder archiving and a Material You (Material 3) interface.
 
 ## Features
 
@@ -40,7 +40,7 @@ CryptAge builds on the work of these open-source projects:
 
 | Project | Use | License |
 |---|---|---|
-| [KAGE](https://github.com/android-password-store/kage) | age encryption/decryption and key handling | Apache-2.0 |
+| [kage](https://github.com/android-password-store/kage) | age encryption/decryption and key handling | Apache-2.0 |
 | [age](https://age-encryption.org) (specification) | encryption format | — |
 | [zstd-jni](https://github.com/luben/zstd-jni) | Zstandard bindings (native libraries included) | BSD-2-Clause |
 | [Zstandard](https://facebook.github.io/zstd/) | compression algorithm | BSD-3-Clause |
