@@ -26,7 +26,7 @@ android {
 dependencies {
     api(project(":core:model"))
     api(project(":core:files"))
-    implementation(project(":core:common"))
+    api(project(":core:common"))
     implementation(project(":core:crypto"))
     implementation(project(":core:archive"))
     implementation(libs.kotlinx.coroutines.android)
