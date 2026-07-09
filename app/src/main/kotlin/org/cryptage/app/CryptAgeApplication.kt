@@ -21,4 +21,9 @@ import android.app.Application
 
 class CryptAgeApplication : Application() {
     val container: AppContainer by lazy { AppContainer(this) }
+
+    override fun onCreate() {
+        super.onCreate()
+        CrashReporter.install(this)
+    }
 }

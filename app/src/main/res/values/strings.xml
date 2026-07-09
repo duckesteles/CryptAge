@@ -7,4 +7,7 @@
     <string name="app_title_licenses">Open Source Licenses</string>
     <string name="app_action_settings">Open settings</string>
     <string name="app_action_back">Back</string>
+    <string name="app_crash_title">CryptAge stopped unexpectedly</string>
+    <string name="app_crash_copy">Copy</string>
+    <string name="app_crash_dismiss">Dismiss</string>
 </resources>

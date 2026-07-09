@@ -24,10 +24,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
@@ -39,6 +41,12 @@ import org.cryptage.feature.onboarding.OnboardingViewModel
 
 @Composable
 fun CryptAgeRoot(container: AppContainer) {
+    val context = LocalContext.current
+    var crashTrace by remember { mutableStateOf(CrashReporter.consume(context)) }
+    crashTrace?.let { trace ->
+        CrashDialog(trace = trace, onDismiss = { crashTrace = null })
+    }
+
     val onboardingCompleted by container.settingsRepository.onboardingCompleted
         .collectAsStateWithLifecycle(initialValue = null)
     val appLock by container.settingsRepository.appLockSettings
