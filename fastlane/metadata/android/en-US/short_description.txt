@@ -1,0 +1,1 @@
+Encrypt files and folders with age, on-device and open source

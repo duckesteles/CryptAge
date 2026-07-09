@@ -1,0 +1,22 @@
+CryptAge encrypts and decrypts files and folders on your device using the age encryption format. Nothing is uploaded and no account is required; all cryptography runs locally.
+
+There are two ways to encrypt:
+
+* Key-based, using age recipients and identities (X25519 key pairs).
+* Passphrase-based, using scrypt.
+
+When decrypting, the mode is detected automatically from the age header.
+
+Files are processed as streams from start to finish, so the work is not bound by available memory and arbitrarily large files are handled without trouble. Several files can be queued in a single batch, each with its own progress and its own error handling, so one failure does not stop the rest.
+
+Folders are archived with tar and compressed with Zstandard before being age-encrypted; decryption reverses the process and restores the original tree. The Zstandard compression level and related parameters can be changed in Settings.
+
+Keys are managed by name. You can generate new key pairs, import existing secret or public keys, and encrypt to several recipients at once. Secret keys are stored encrypted at rest, protected by the Android Keystore.
+
+Access to the app can be gated with a biometric lock, a PIN, or both.
+
+Output is written wherever you choose through the Storage Access Framework, and the .age extension is applied automatically.
+
+The interface follows Material You, adopting the system light and dark theme and dynamic color, and provides a themed icon.
+
+CryptAge is free software under the GNU General Public License v3 or later.
