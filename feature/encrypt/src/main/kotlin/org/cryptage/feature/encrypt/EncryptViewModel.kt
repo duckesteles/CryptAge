@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.cryptage.core.common.DispatcherProvider
+import org.cryptage.core.files.OutputNames
 import org.cryptage.core.files.PickedDocument
 import org.cryptage.core.files.SafStorage
 import org.cryptage.core.jobs.BatchController
@@ -37,6 +38,7 @@ import org.cryptage.core.jobs.EncryptRequest
 import org.cryptage.core.model.BatchState
 import org.cryptage.core.model.EncryptMode
 import org.cryptage.core.model.KeyEntry
+import org.cryptage.core.model.ZstdSettings
 import org.cryptage.core.securestore.KeyEntryRepository
 import org.cryptage.core.settings.SettingsRepository
 
@@ -53,18 +55,26 @@ class EncryptViewModel(
         val keyBased: Boolean = true,
         val selectedRecipientIds: Set<String> = emptySet(),
         val passphrase: String = "",
-        val destination: Uri? = null,
-        val destinationName: String? = null,
     )
+
+    data class SavePrompt(val sourceUri: Uri, val suggestedName: String)
 
     private val mutableState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = mutableState.asStateFlow()
+
+    private val pendingSaveFlow = MutableStateFlow<SavePrompt?>(null)
+    val pendingSave: StateFlow<SavePrompt?> = pendingSaveFlow.asStateFlow()
 
     val recipientEntries: StateFlow<List<KeyEntry>> = keyEntries.entries
         .map { entries -> entries.filter(KeyEntry::hasRecipient) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val batch: StateFlow<BatchState> = batchController.state
+
+    private var queue: ArrayDeque<SavePrompt> = ArrayDeque()
+    private val resolvedOutputs = mutableMapOf<String, Uri>()
+    private var activeMode: EncryptMode? = null
+    private var activeZstd: ZstdSettings = ZstdSettings()
 
     fun addFiles(uris: List<Uri>) {
         if (uris.isEmpty()) return
@@ -79,6 +89,7 @@ class EncryptViewModel(
     fun addFolder(uri: Uri?) {
         if (uri == null) return
         viewModelScope.launch(dispatchers.io) {
+            storage.persistTreePermission(uri)
             val folder = storage.treeInfo(uri)
             mutableState.update { state ->
                 state.copy(sources = (state.sources + folder).distinctBy { it.uri })
@@ -111,17 +122,8 @@ class EncryptViewModel(
         mutableState.update { it.copy(passphrase = passphrase) }
     }
 
-    fun setDestination(uri: Uri?) {
-        if (uri == null) return
-        viewModelScope.launch(dispatchers.io) {
-            storage.persistTreePermission(uri)
-            val name = storage.treeInfo(uri).name
-            mutableState.update { it.copy(destination = uri, destinationName = name) }
-        }
-    }
-
     fun canStart(state: UiState, batch: BatchState): Boolean {
-        if (batch.running || state.sources.isEmpty() || state.destination == null) return false
+        if (batch.running || state.sources.isEmpty()) return false
         return if (state.keyBased) {
             state.selectedRecipientIds.isNotEmpty()
         } else {
@@ -131,20 +133,64 @@ class EncryptViewModel(
 
     fun start() {
         val state = mutableState.value
-        val destination = state.destination ?: return
         viewModelScope.launch {
-            val mode = if (state.keyBased) {
-                val recipients = recipientEntries.value
-                    .filter { it.id in state.selectedRecipientIds }
-                    .mapNotNull(KeyEntry::recipient)
-                if (recipients.isEmpty()) return@launch
-                EncryptMode.Recipients(recipients)
-            } else {
-                if (state.passphrase.isEmpty()) return@launch
-                EncryptMode.Passphrase(state.passphrase)
-            }
+            val mode = resolveMode(state) ?: return@launch
             val zstd = settings.zstdSettings.first()
-            batchController.startEncrypt(EncryptRequest(state.sources, mode, destination, zstd))
+            activeMode = mode
+            activeZstd = zstd
+            resolvedOutputs.clear()
+            queue = ArrayDeque(
+                state.sources.map { source ->
+                    SavePrompt(source.uri, suggestedName(source, zstd))
+                },
+            )
+            pendingSaveFlow.value = queue.firstOrNull()
         }
     }
+
+    fun onDestinationChosen(uri: Uri?) {
+        val current = pendingSaveFlow.value ?: return
+        if (uri != null) {
+            resolvedOutputs[current.sourceUri.toString()] = uri
+        }
+        queue.removeFirstOrNull()
+        val next = queue.firstOrNull()
+        if (next != null) {
+            pendingSaveFlow.value = next
+        } else {
+            pendingSaveFlow.value = null
+            launchBatch()
+        }
+    }
+
+    private fun launchBatch() {
+        val mode = activeMode ?: return
+        val state = mutableState.value
+        val sources = state.sources.filter { resolvedOutputs.containsKey(it.uri.toString()) }
+        if (sources.isEmpty()) return
+        batchController.startEncrypt(
+            EncryptRequest(
+                sources = sources,
+                mode = mode,
+                outputs = resolvedOutputs.toMap(),
+                zstd = activeZstd,
+            ),
+        )
+    }
+
+    private fun resolveMode(state: UiState): EncryptMode? = if (state.keyBased) {
+        val recipients = recipientEntries.value
+            .filter { it.id in state.selectedRecipientIds }
+            .mapNotNull(KeyEntry::recipient)
+        if (recipients.isEmpty()) null else EncryptMode.Recipients(recipients)
+    } else {
+        if (state.passphrase.isEmpty()) null else EncryptMode.Passphrase(state.passphrase)
+    }
+
+    private fun suggestedName(source: PickedDocument, zstd: ZstdSettings): String =
+        if (source.isDirectory) {
+            OutputNames.encryptedFolder(source.name, zstd.enabled)
+        } else {
+            OutputNames.encryptedFile(source.name)
+        }
 }

@@ -41,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,6 +58,7 @@ fun EncryptScreen(viewModel: EncryptViewModel, modifier: Modifier = Modifier) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val batch by viewModel.batch.collectAsStateWithLifecycle()
     val recipients by viewModel.recipientEntries.collectAsStateWithLifecycle()
+    val pendingSave by viewModel.pendingSave.collectAsStateWithLifecycle()
 
     val filesLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenMultipleDocuments(),
@@ -64,9 +66,13 @@ fun EncryptScreen(viewModel: EncryptViewModel, modifier: Modifier = Modifier) {
     val folderLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocumentTree(),
     ) { uri -> viewModel.addFolder(uri) }
-    val destinationLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocumentTree(),
-    ) { uri -> viewModel.setDestination(uri) }
+    val saveLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/octet-stream"),
+    ) { uri -> viewModel.onDestinationChosen(uri) }
+
+    LaunchedEffect(pendingSave) {
+        pendingSave?.let { saveLauncher.launch(it.suggestedName) }
+    }
 
     Column(
         modifier = modifier
@@ -155,15 +161,11 @@ fun EncryptScreen(viewModel: EncryptViewModel, modifier: Modifier = Modifier) {
             )
         }
 
-        SectionTitle(stringResource(R.string.encrypt_section_destination))
-        OutlinedButton(onClick = { destinationLauncher.launch(primaryStorageInitialUri) }) {
-            Icon(Icons.Filled.Folder, contentDescription = null)
-            Text(
-                text = state.destinationName
-                    ?: stringResource(R.string.encrypt_choose_destination),
-                modifier = Modifier.padding(start = 8.dp),
-            )
-        }
+        Text(
+            text = stringResource(R.string.encrypt_destination_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
 
         Button(
             onClick = viewModel::start,

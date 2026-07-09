@@ -25,7 +25,7 @@ import org.cryptage.core.model.ZstdSettings
 data class EncryptRequest(
     val sources: List<PickedDocument>,
     val mode: EncryptMode,
-    val destinationTree: Uri,
+    val outputs: Map<String, Uri>,
     val zstd: ZstdSettings,
 )
 
@@ -33,7 +33,9 @@ data class DecryptRequest(
     val sources: List<PickedDocument>,
     val identities: List<String>,
     val passphrase: String?,
-    val destinationTree: Uri,
+    val outputs: Map<String, Uri>,
 )
 
 internal class PassphraseRequiredException : Exception("a passphrase is required for this file")
+
+internal class MissingDestinationException : Exception("no destination chosen for this item")

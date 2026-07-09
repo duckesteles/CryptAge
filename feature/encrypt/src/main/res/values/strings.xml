@@ -8,8 +8,7 @@
     <string name="encrypt_mode_passphrase">With passphrase</string>
     <string name="encrypt_no_recipients">No public keys yet. Add or generate one under Settings, Keys.</string>
     <string name="encrypt_passphrase_label">Passphrase</string>
-    <string name="encrypt_section_destination">Destination</string>
-    <string name="encrypt_choose_destination">Choose destination folder</string>
+    <string name="encrypt_destination_hint">When you tap Encrypt, you choose where to save each output file and its name.</string>
     <string name="encrypt_start">Encrypt</string>
     <string name="encrypt_section_progress">Progress</string>
 </resources>

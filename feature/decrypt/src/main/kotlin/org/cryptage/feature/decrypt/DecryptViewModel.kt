@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.cryptage.core.common.DispatcherProvider
+import org.cryptage.core.files.OutputNames
 import org.cryptage.core.files.PickedDocument
 import org.cryptage.core.files.SafStorage
 import org.cryptage.core.jobs.BatchController
@@ -49,19 +50,26 @@ class DecryptViewModel(
 
     data class UiState(
         val sources: List<PickedDocument> = emptyList(),
-        val destination: Uri? = null,
-        val destinationName: String? = null,
         val askPassphrase: Boolean = false,
     )
 
+    data class SavePrompt(val sourceUri: Uri, val suggestedName: String)
+
     private val mutableState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = mutableState.asStateFlow()
+
+    private val pendingSaveFlow = MutableStateFlow<SavePrompt?>(null)
+    val pendingSave: StateFlow<SavePrompt?> = pendingSaveFlow.asStateFlow()
 
     private val identities: StateFlow<List<String>> = keyEntries.entries
         .map { entries -> entries.mapNotNull(KeyEntry::identity) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val batch: StateFlow<BatchState> = batchController.state
+
+    private var queue: ArrayDeque<SavePrompt> = ArrayDeque()
+    private val resolvedOutputs = mutableMapOf<String, Uri>()
+    private var activePassphrase: String? = null
 
     fun addFiles(uris: List<Uri>) {
         if (uris.isEmpty()) return
@@ -79,49 +87,70 @@ class DecryptViewModel(
         }
     }
 
-    fun setDestination(uri: Uri?) {
-        if (uri == null) return
-        viewModelScope.launch(dispatchers.io) {
-            storage.persistTreePermission(uri)
-            val name = storage.treeInfo(uri).name
-            mutableState.update { it.copy(destination = uri, destinationName = name) }
-        }
-    }
-
     fun canStart(state: UiState, batch: BatchState): Boolean =
-        !batch.running && state.sources.isNotEmpty() && state.destination != null
+        !batch.running && state.sources.isNotEmpty()
 
     fun start() {
         viewModelScope.launch {
             val state = mutableState.value
-            if (state.destination == null || state.sources.isEmpty()) return@launch
+            if (state.sources.isEmpty()) return@launch
             if (preflight.anyNeedsPassphrase(state.sources)) {
                 mutableState.update { it.copy(askPassphrase = true) }
             } else {
-                launchBatch(passphrase = null)
+                beginSaveQueue(passphrase = null)
             }
         }
     }
 
     fun startWithPassphrase(passphrase: String) {
         mutableState.update { it.copy(askPassphrase = false) }
-        viewModelScope.launch { launchBatch(passphrase) }
+        beginSaveQueue(passphrase)
     }
 
     fun dismissPassphrase() {
         mutableState.update { it.copy(askPassphrase = false) }
     }
 
-    private suspend fun launchBatch(passphrase: String?) {
+    fun onDestinationChosen(uri: Uri?) {
+        val current = pendingSaveFlow.value ?: return
+        if (uri != null) {
+            resolvedOutputs[current.sourceUri.toString()] = uri
+        }
+        queue.removeFirstOrNull()
+        val next = queue.firstOrNull()
+        if (next != null) {
+            pendingSaveFlow.value = next
+        } else {
+            pendingSaveFlow.value = null
+            launchBatch()
+        }
+    }
+
+    private fun beginSaveQueue(passphrase: String?) {
         val state = mutableState.value
-        val destination = state.destination ?: return
-        batchController.startDecrypt(
-            DecryptRequest(
-                sources = state.sources,
-                identities = identities.first(),
-                passphrase = passphrase,
-                destinationTree = destination,
-            ),
+        activePassphrase = passphrase
+        resolvedOutputs.clear()
+        queue = ArrayDeque(
+            state.sources.map { source ->
+                SavePrompt(source.uri, OutputNames.decrypted(source.name))
+            },
         )
+        pendingSaveFlow.value = queue.firstOrNull()
+    }
+
+    private fun launchBatch() {
+        viewModelScope.launch {
+            val state = mutableState.value
+            val sources = state.sources.filter { resolvedOutputs.containsKey(it.uri.toString()) }
+            if (sources.isEmpty()) return@launch
+            batchController.startDecrypt(
+                DecryptRequest(
+                    sources = sources,
+                    identities = identities.first(),
+                    passphrase = activePassphrase,
+                    outputs = resolvedOutputs.toMap(),
+                ),
+            )
+        }
     }
 }

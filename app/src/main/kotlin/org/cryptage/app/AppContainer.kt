@@ -72,7 +72,7 @@ class AppContainer(context: Context) {
             scope = applicationScope,
             dispatchers = dispatchers,
             encryptExecutor = EncryptExecutor(safStorage, TreeArchiveEntries(appContext)),
-            decryptExecutor = DecryptExecutor(safStorage, dispatchers.io),
+            decryptExecutor = DecryptExecutor(safStorage),
         )
     }
 }

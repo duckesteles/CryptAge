@@ -29,7 +29,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material3.Button
@@ -39,6 +38,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,19 +48,23 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.cryptage.core.model.JobOperation
 import org.cryptage.core.ui.JobProgressList
 import org.cryptage.core.ui.PassphraseDialog
-import org.cryptage.core.ui.primaryStorageInitialUri
 
 @Composable
 fun DecryptScreen(viewModel: DecryptViewModel, modifier: Modifier = Modifier) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val batch by viewModel.batch.collectAsStateWithLifecycle()
+    val pendingSave by viewModel.pendingSave.collectAsStateWithLifecycle()
 
     val filesLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenMultipleDocuments(),
     ) { uris -> viewModel.addFiles(uris) }
-    val destinationLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocumentTree(),
-    ) { uri -> viewModel.setDestination(uri) }
+    val saveLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/octet-stream"),
+    ) { uri -> viewModel.onDestinationChosen(uri) }
+
+    LaunchedEffect(pendingSave) {
+        pendingSave?.let { saveLauncher.launch(it.suggestedName) }
+    }
 
     if (state.askPassphrase) {
         PassphraseDialog(
@@ -112,15 +116,11 @@ fun DecryptScreen(viewModel: DecryptViewModel, modifier: Modifier = Modifier) {
             }
         }
 
-        SectionTitle(stringResource(R.string.decrypt_section_destination))
-        OutlinedButton(onClick = { destinationLauncher.launch(primaryStorageInitialUri) }) {
-            Icon(Icons.Filled.Folder, contentDescription = null)
-            Text(
-                text = state.destinationName
-                    ?: stringResource(R.string.decrypt_choose_destination),
-                modifier = Modifier.padding(start = 8.dp),
-            )
-        }
+        Text(
+            text = stringResource(R.string.decrypt_destination_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
 
         Button(
             onClick = viewModel::start,
