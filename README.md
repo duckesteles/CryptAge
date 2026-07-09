@@ -1,4 +1,10 @@
-# CryptAge
+<p align="center">
+  <img src="docs/logo.svg" width="140" alt="CryptAge logo" />
+</p>
+
+<h1 align="center">CryptAge</h1>
+
+---
 
 CryptAge is a native Android app for encrypting and decrypting files and folders with the [age](https://age-encryption.org) file encryption format, built on [kage](https://github.com/android-password-store/kage), with Zstandard folder archiving and a Material You (Material 3) interface.
 
