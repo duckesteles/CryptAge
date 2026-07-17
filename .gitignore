@@ -9,6 +9,7 @@ captures/
 .externalNativeBuild/
 .cxx/
 .claude/
+CLAUDE.md
 *.apk
 *.aab
 *.ap_
