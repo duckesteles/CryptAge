@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.cryptage.core.model.JobOperation
 import org.cryptage.core.ui.JobProgressList
 import org.cryptage.core.ui.PassphraseDialog
+import org.cryptage.core.ui.primaryStorageInitialUri
 
 @Composable
 fun DecryptScreen(viewModel: DecryptViewModel, modifier: Modifier = Modifier) {
@@ -61,9 +62,18 @@ fun DecryptScreen(viewModel: DecryptViewModel, modifier: Modifier = Modifier) {
     val saveLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/octet-stream"),
     ) { uri -> viewModel.onDestinationChosen(uri) }
+    val folderLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocumentTree(),
+    ) { uri -> viewModel.onDestinationChosen(uri) }
 
     LaunchedEffect(pendingSave) {
-        pendingSave?.let { saveLauncher.launch(it.suggestedName) }
+        pendingSave?.let { prompt ->
+            if (prompt.isFolder) {
+                folderLauncher.launch(primaryStorageInitialUri)
+            } else {
+                saveLauncher.launch(prompt.suggestedName)
+            }
+        }
     }
 
     if (state.askPassphrase) {

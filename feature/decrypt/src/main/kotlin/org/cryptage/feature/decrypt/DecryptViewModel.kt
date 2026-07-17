@@ -53,7 +53,7 @@ class DecryptViewModel(
         val askPassphrase: Boolean = false,
     )
 
-    data class SavePrompt(val sourceUri: Uri, val suggestedName: String)
+    data class SavePrompt(val sourceUri: Uri, val suggestedName: String, val isFolder: Boolean)
 
     private val mutableState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = mutableState.asStateFlow()
@@ -114,6 +114,9 @@ class DecryptViewModel(
     fun onDestinationChosen(uri: Uri?) {
         val current = pendingSaveFlow.value ?: return
         if (uri != null) {
+            if (current.isFolder) {
+                storage.persistTreePermission(uri)
+            }
             resolvedOutputs[current.sourceUri.toString()] = uri
         }
         queue.removeFirstOrNull()
@@ -132,7 +135,8 @@ class DecryptViewModel(
         resolvedOutputs.clear()
         queue = ArrayDeque(
             state.sources.map { source ->
-                SavePrompt(source.uri, OutputNames.decrypted(source.name))
+                val decryptedName = OutputNames.decrypted(source.name)
+                SavePrompt(source.uri, decryptedName, OutputNames.isFolderArchive(decryptedName))
             },
         )
         pendingSaveFlow.value = queue.firstOrNull()

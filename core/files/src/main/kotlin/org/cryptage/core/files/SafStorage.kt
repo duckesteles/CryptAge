@@ -45,8 +45,7 @@ class SafStorage(private val context: Context) {
     fun createDirectoryInTree(treeUri: Uri, displayName: String): DocumentFile {
         val tree = DocumentFile.fromTreeUri(context, treeUri)
             ?: throw IOException("cannot access destination directory")
-        return tree.findFile(displayName)?.takeIf(DocumentFile::isDirectory)
-            ?: tree.createDirectory(displayName)
+        return tree.createDirectory(displayName)
             ?: throw IOException("cannot create directory in destination")
     }
 
