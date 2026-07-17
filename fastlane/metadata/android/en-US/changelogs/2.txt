@@ -1,0 +1,1 @@
+Decrypting a folder archive now extracts the folder into a directory you pick, instead of leaving a raw .tar.zst file.
