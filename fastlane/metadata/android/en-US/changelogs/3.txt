@@ -1,0 +1,1 @@
+Updated the age encryption library and other build dependencies, including a streaming decryption fix for large files and folder archives.
