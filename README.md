@@ -22,31 +22,17 @@ CryptAge is a native Android app for encrypting and decrypting files and folders
   <img src="docs/screenshots/7.png" width="24%" alt="CryptAge screenshot 7" />
 </p>
 
-## Features
-
-- Encrypt and decrypt files with age: key-based (recipients/identities) and passphrase-based (scrypt) modes; decrypt auto-detects the mode from the age header.
-- Streaming end to end: arbitrarily large files without loading them into memory.
-- Batch processing with per-file progress and per-file error isolation.
-- Folder encryption: tar + zstd archive, then age-encrypt; decryption reverses it. Zstd parameters adjustable in Settings.
-- Named key management: generate keypairs, import secret/public keys, encrypt to multiple recipients. Secret keys stored encrypted at rest (Android Keystore-backed).
-- Optional app lock with biometrics and/or PIN.
-- Output saved where you choose via the Storage Access Framework; `.age` naming handled automatically.
-- Material You dynamic color following the system light/dark setting, themed-icon support.
-- English UI, fully resource-based and ready for additional languages.
-
 Requires Android 12 (API 31) or newer. Supports arm64-v8a, armeabi-v7a, x86, and x86_64.
 
 ## Building
 
-Requirements: JDK 21 and the Android SDK (compileSdk 36). The Gradle wrapper handles the rest.
+Requirements: JDK 21 and the Android SDK.
 
 ```
 ./gradlew :app:assembleRelease
 ```
 
-Release signing is read from the environment (`SIGNING_KEYSTORE_PATH`, `SIGNING_KEYSTORE_PASSWORD`, `SIGNING_KEY_ALIAS`, `SIGNING_KEY_PASSWORD`). Without these, a local build falls back gracefully to an unsigned release output.
-
-Continuous integration: every push triggers a GitHub Actions workflow that builds and signs the release APK (`CryptAge.apk`) using repository secrets, and uploads it as a build artifact.
+Release signing is read from the environment (`SIGNING_KEYSTORE_PATH`, `SIGNING_KEYSTORE_PASSWORD`, `SIGNING_KEY_ALIAS`, `SIGNING_KEY_PASSWORD`).
 
 ## License
 
